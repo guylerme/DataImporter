@@ -7,13 +7,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 /**
  * @author Guylerme Figueiredo
  * 
  *         Classe responsável por realizar o mapeamento objeto relacional
+ * @param <V>
  */
-public class OrclDataMapper implements DataMapper {
+public class OrclDataMapper<V> implements DataMapper {
 
 	private Connection conn = null;
 
@@ -129,6 +131,70 @@ public class OrclDataMapper implements DataMapper {
 
 	}
 
+	public void insertData(HashMap<String, String> data, Table table) {
+		
+		String sql = "INSERT INTO " + table.getName() + " (";
+
+		/* Cria parte do comando a partir da lista de colunas */
+		for (int i = 0; i < table.getColumns().size(); i++) {
+			if (i == table.getColumns().size() - 1)
+				sql += table.getColumns().get(i) + ")";
+			else
+				sql += table.getColumns().get(i) + ", ";
+		}
+
+		sql += " VALUES(\'";
+
+		/*
+		 * Completa a criação do comando DML com a lista de dados a serem
+		 * inseridos
+		 */
+		for (int i = 0; i < table.getColumns().size(); i++) {
+			if (i == table.getColumns().size() - 1) {
+				if (i < table.getColumns().size())
+					sql += data.get(table.getColumns().get(i)) + "\')";
+				else
+					sql += "" + "\')";
+			}
+
+			else {
+				if (i < table.getColumns().size())
+					sql += data.get(table.getColumns().get(i)) + "\', \'";
+				else
+					sql += "" + "\', \'";
+			}
+
+		}
+
+		
+		//conn = (Connection) OracleConn.getInstance().getConnection();
+
+		try {
+
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+
+			pstmt.execute();
+
+			pstmt.close();
+			conn.close();
+
+		} catch (SQLException ex) {
+
+			System.out.println("\n*** SQLException caught ***\n");
+			while (ex != null) {
+				System.out.println("SQLState: " + ex.getSQLState());
+				System.out.println("Message:  " + ex.getMessage());
+				System.out.println("Vendor:   " + ex.getErrorCode());
+				ex = ex.getNextException();
+				System.out.println("");
+			}
+
+		} catch (java.lang.Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
 	public void resizeTable(Table table) {
 
 		conn = (Connection) OracleConn.getInstance().getConnection();
@@ -186,5 +252,47 @@ public class OrclDataMapper implements DataMapper {
 			ex.printStackTrace();
 		}
 
+	}
+
+	public boolean existsTable(Table table) {
+
+		conn = (Connection) OracleConn.getInstance().getConnection();
+
+		int x = 0;
+
+		try {
+
+			String sql = "Select Count(*) from ALL_TABLES where TABLE_NAME = '"
+					+ table.getName() + "'";
+
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+
+			ResultSet rs = pstmt.executeQuery();
+
+			while (rs.next())
+				x = rs.getInt(0);
+
+			pstmt.close();
+			conn.close();
+
+		} catch (SQLException ex) {
+
+			System.out.println("\n*** SQLException caught ***\n");
+			while (ex != null) {
+				System.out.println("SQLState: " + ex.getSQLState());
+				System.out.println("Message:  " + ex.getMessage());
+				System.out.println("Vendor:   " + ex.getErrorCode());
+				ex = ex.getNextException();
+				System.out.println("");
+			}
+
+		} catch (java.lang.Exception ex) {
+			ex.printStackTrace();
+		}
+
+		if (x > 0)
+			return true;
+		else
+			return false;
 	}
 }

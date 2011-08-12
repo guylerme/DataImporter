@@ -4,11 +4,16 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 import net.sf.json.JSONObject;
 import net.sf.json.util.JSONBuilder;
 import net.sf.json.util.JSONStringer;
 import br.com.dataimporter.controller.TsvImporter;
+import br.com.dataimporter.model.DataMapper;
+import br.com.dataimporter.model.OrclDataMapper;
+import br.com.dataimporter.model.Table;
 
 public class Teste {
 
@@ -24,9 +29,10 @@ public class Teste {
 
 		// importer.importData("F:/","autores-open_library-test.txt");
 
-		String filePath = "F:/";
+		String filePath = "G:/";
 		String fileName = "autores-open_library-test.txt";
 		String json = "";
+		String tag = "";
 
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(filePath
@@ -34,24 +40,25 @@ public class Teste {
 
 			int cont = 0;
 			String data;
-			String tag = "";
+
 			while (in.ready()) {
 				data = in.readLine();
 				if (data.charAt(0) == '/')
-					data =in.readLine();
+					data = in.readLine();
 
 				for (int i = 0; i < data.length(); i++) {
 					if (data.charAt(i) == '{')
 						cont++;
 					else {
 						if (data.charAt(i) == '}')
-							cont --;
+							cont--;
 					}
 
 					tag += data.charAt(i);
 
 					if ((cont == 0) && !(tag.trim().equalsIgnoreCase(""))) {
-						analyseTag(tag);
+						analyseTag(tag, fileName);
+						tag = "";
 
 					}
 
@@ -71,10 +78,18 @@ public class Teste {
 		 * type": {"key": "/type/author"}, "revision": 2}
 		 */
 
-		json = json.trim();
+	}
+
+	private static void analyseTag(String tag, String fileName) {
+
+		DataMapper dm = new OrclDataMapper();
+		String json = tag.trim();
 
 		String campo = "";
-		ArrayList listaCampos = new ArrayList();
+		String key = "";
+		String data = "";
+
+		HashMap<String, String> listaCampos = new HashMap<String, String>();
 
 		// ignorando a primeira e a ultima chaves
 		for (int i = 1; i < json.length() - 1; i++) {
@@ -82,7 +97,12 @@ public class Teste {
 				if (json.charAt(i) != ',')
 					campo += json.charAt(i);
 				else {
-					listaCampos.add(campo.trim());
+
+					key = campo.trim().split(": ", 2)[0];
+					data = campo.trim().split(": ", 2)[1];
+					listaCampos.put(key.trim().toUpperCase(), data.trim()
+							.toUpperCase());
+
 					campo = "";
 
 				}
@@ -92,18 +112,30 @@ public class Teste {
 					i++;
 				}
 				campo += json.charAt(i);
-				listaCampos.add(campo.trim());
+				key = campo.trim().split(": ", 2)[0];
+				data = campo.trim().split(": ", 2)[1];
+				listaCampos.put(key.trim().toUpperCase(), data.trim()
+						.toUpperCase());
 				i++;
 				campo = "";
 			}
 
 		}
-		listaCampos.add(campo.trim());
-		System.out.println("Teste");
-	}
+		key = campo.trim().split(": ", 2)[0];
+		data = campo.trim().split(": ", 2)[1];
+		listaCampos.put(key.trim().toUpperCase(), data.trim().toUpperCase());
 
-	private static void analyseTag(String tag) {
-		tag = "";
+		Table table = new Table();
+
+		table.setName(fileName);
+
+		Set<String> chaves = listaCampos.keySet();
+		for (String chave : chaves) {
+			if (chave != null)
+				table.addColumn(chave);
+		}
+
+				dm.insertData(listaCampos, table);
 
 	}
 }
