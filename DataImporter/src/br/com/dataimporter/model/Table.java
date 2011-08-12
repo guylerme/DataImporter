@@ -45,7 +45,7 @@ public class Table {
 	public Table(String fileName, String columns) {
 		this.setName("TB_"
 				+ fileName.replace(".tsv", "").replaceAll(" ", "_")
-						.toUpperCase());
+						.replace(".txt", "").toUpperCase());
 
 		String[] columnsList = columns.split("\t");
 

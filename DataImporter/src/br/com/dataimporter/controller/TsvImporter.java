@@ -27,16 +27,17 @@ public class TsvImporter {
 		this.fileName = fileName;
 
 		/* Passo 1: Abrir o arquivo */
-		try {
-			BufferedReader in = new BufferedReader(new FileReader(filePath
-					+ "/" + fileName));
 
-			/*
-			 * Passo 2: Identificar os nomes das colunas a partir da primeira
-			 * linha do arquivo
-			 */
-			String columns;
+		BufferedReader in = this.loadFile(filePath, fileName);
+
+		/*
+		 * Passo 2: Identificar os nomes das colunas a partir da primeira linha
+		 * do arquivo
+		 */
+		String columns;
+		try {
 			in.ready();
+
 			columns = in.readLine();
 
 			/* Passo 3: Criar a tabela com as colunas definidas */
@@ -56,7 +57,17 @@ public class TsvImporter {
 
 			in.close();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+	}
 
+	private BufferedReader loadFile(String filePath, String fileName) {
+		BufferedReader in = null;
+		try {
+			in = new BufferedReader(new FileReader(filePath + "/" + fileName));
+		} catch (IOException e) {
+		}
+		return in;
 	}
 }
