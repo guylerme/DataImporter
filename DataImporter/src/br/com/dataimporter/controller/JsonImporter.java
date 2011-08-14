@@ -34,6 +34,14 @@ public class JsonImporter implements Importer {
 	 * @see br.com.dataimporter.controller.Importer#importData(java.lang.String,
 	 * java.lang.String)
 	 */
+
+	/**
+	 * @description Método responsável por importar os dados no formato JSON
+	 * @param filePath
+	 *            Caminho onde está localizado o arquivo
+	 * @param fileName
+	 *            Nome do arquivo
+	 */
 	@Override
 	public void importData(String filePath, String fileName) {
 		this.filePath = filePath;

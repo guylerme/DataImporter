@@ -59,6 +59,10 @@ public class OracleConn {
 		return connection;
 	}
 
+	/**
+	 * @description Método que implementa o design patter Singleton para
+	 *              retornar somente uma instância da conexão
+	 **/
 	public static OracleConn getInstance() {
 		if (instance == null) {
 			instance = new OracleConn();

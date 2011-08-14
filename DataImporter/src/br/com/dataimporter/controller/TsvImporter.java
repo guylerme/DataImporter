@@ -11,20 +11,28 @@ import br.com.dataimporter.model.Table;
 /**
  * @author Guylerme Figueiredo
  * 
- *         Classe reponsável por importar dados de arquivos TSV (Tab Separeted
- *         Value)
+ * @description Classe reponsável por importar dados de arquivos TSV (Tab
+ *              Separeted Value)
  */
 public class TsvImporter implements Importer {
 
-	/** Caminho do arquivo */
+	/* Caminho do arquivo */
 	@SuppressWarnings("unused")
 	private String filePath;
+	/* Nome do arquivo */
 	@SuppressWarnings("unused")
 	private String fileName;
 
-	@SuppressWarnings("rawtypes")
-	private DataMapper dm = new OrclDataMapper();
+	/* Mapeador objeto-relacional */
+	private DataMapper dm;
 
+	/**
+	 * @description Método responsável por importar os dados no formato TSV
+	 * @param filePath
+	 *            Caminho onde está localizado o arquivo
+	 * @param fileName
+	 *            Nome do arquivo
+	 */
 	public void importData(String filePath, String fileName) {
 		this.filePath = filePath;
 		this.fileName = fileName;
@@ -64,9 +72,17 @@ public class TsvImporter implements Importer {
 		}
 	}
 
+	/*
+	 * Utilizado para carregar o arquivo no buffer
+	 * 
+	 * @see br.com.dataimporter.controller.Importer#loadFile(java.lang.String,
+	 * java.lang.String)
+	 */
+	@Override
 	public BufferedReader loadFile(String filePath, String fileName) {
 		BufferedReader in = null;
 		try {
+			/* Carrega o arquivo em um buffer */
 			in = new BufferedReader(new FileReader(filePath + "/" + fileName));
 		} catch (IOException e) {
 		}

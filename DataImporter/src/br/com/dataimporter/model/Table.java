@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * @author Guylerme Figueiredo
  * 
- *         Classe que irá abstrair o conceito tabela de banco de dados.
+ * @description Classe que irá abstrair o conceito tabela de banco de dados.
  */
 public class Table {
 
@@ -20,7 +20,14 @@ public class Table {
 	}
 
 	public void setName(String name) {
-		this.name = name.toUpperCase();
+		/*
+		 * Todo nome de tabela irá começar com TB_. Fazemos também a troca de
+		 * espaços por _ e retira-se a extensão do arquivo
+		 */
+		this.name = "TB_"
+				+ name.replace(".tsv", "").replaceAll(" ", "_")
+						.replace(".txt", "").toUpperCase();
+
 	}
 
 	public ArrayList<String> getColumns() {
@@ -32,7 +39,8 @@ public class Table {
 	}
 
 	public void addColumn(String columnName) {
-		columns.add(columnName.toUpperCase());
+		/* Todo nome de coluna irá começar com C_ */
+		columns.add("C_" + columnName.toUpperCase());
 	}
 
 	public void removeColumn(String columnName) {
@@ -43,14 +51,12 @@ public class Table {
 	}
 
 	public Table(String fileName, String columns) {
-		this.setName("TB_"
-				+ fileName.replace(".tsv", "").replaceAll(" ", "_")
-						.replace(".txt", "").toUpperCase());
+		this.setName(fileName);
 
 		String[] columnsList = columns.split("\t");
 
 		for (int i = 0; i < columnsList.length; i++)
-			this.addColumn("C_" + columnsList[i].toUpperCase());
+			this.addColumn(columnsList[i]);
 	}
 
 }

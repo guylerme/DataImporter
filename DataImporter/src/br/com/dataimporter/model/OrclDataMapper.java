@@ -36,6 +36,10 @@ public class OrclDataMapper implements DataMapper {
 			/* Baseados na lista de colunas o comando DDL é criado */
 			for (int i = 0; i < table.getColumns().size(); i++) {
 				if (i == table.getColumns().size() - 1)
+					/*
+					 * Em princípio as colunas terão um tamanho grande o
+					 * suficiente para poder armazenar toda a informação.
+					 */
 					sql += table.getColumns().get(i) + " varchar2(4000))";
 				else
 					sql += table.getColumns().get(i) + " varchar2(4000), ";
@@ -132,7 +136,7 @@ public class OrclDataMapper implements DataMapper {
 	}
 
 	public void insertData(HashMap<String, String> data, Table table) {
-		
+
 		String sql = "INSERT INTO " + table.getName() + " (";
 
 		/* Cria parte do comando a partir da lista de colunas */
@@ -166,12 +170,10 @@ public class OrclDataMapper implements DataMapper {
 
 		}
 
-		
-		//conn = (Connection) OracleConn.getInstance().getConnection();
+		// conn = (Connection) OracleConn.getInstance().getConnection();
 
 		try {
 
-			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 
 			pstmt.execute();
