@@ -15,7 +15,7 @@ import java.util.HashMap;
  *         Classe responsável por realizar o mapeamento objeto relacional
  * @param <V>
  */
-public class OrclDataMapper<V> implements DataMapper {
+public class OrclDataMapper implements DataMapper {
 
 	private Connection conn = null;
 

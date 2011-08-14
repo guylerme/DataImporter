@@ -17,9 +17,12 @@ import br.com.dataimporter.model.Table;
 public class TsvImporter implements Importer {
 
 	/** Caminho do arquivo */
+	@SuppressWarnings("unused")
 	private String filePath;
+	@SuppressWarnings("unused")
 	private String fileName;
 
+	@SuppressWarnings("rawtypes")
 	private DataMapper dm = new OrclDataMapper();
 
 	public void importData(String filePath, String fileName) {
@@ -61,7 +64,7 @@ public class TsvImporter implements Importer {
 		}
 	}
 
-	private BufferedReader loadFile(String filePath, String fileName) {
+	public BufferedReader loadFile(String filePath, String fileName) {
 		BufferedReader in = null;
 		try {
 			in = new BufferedReader(new FileReader(filePath + "/" + fileName));

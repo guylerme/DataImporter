@@ -29,6 +29,7 @@ public class FileChooser extends JPanel implements ActionListener {
 	JFileChooser fc;
 
 	private String filePath = "";
+	private String fileName = "";
 
 	@SuppressWarnings("deprecation")
 	public FileChooser() {
@@ -89,7 +90,8 @@ public class FileChooser extends JPanel implements ActionListener {
 				file = fc.getSelectedFile();
 				// This is where a real application would open the file.
 				log.append("Opening: " + file.getName() + "." + newline);
-				this.filePath = ""+file.getAbsoluteFile();
+				this.filePath = file.getPath();
+				this.fileName = file.getName();
 				importButton.enable();
 			} else {
 				log.append("Open command cancelled by user." + newline);
@@ -99,7 +101,8 @@ public class FileChooser extends JPanel implements ActionListener {
 			// Handle save button action.
 		} else if (e.getSource() == importButton) {
 
-			log.append("Importing data from: " + filePath + "." + newline);
+			log.append("Importing data from: " + filePath + "\\" + fileName
+					+ "." + newline);
 
 			log.setCaretPosition(log.getDocument().getLength());
 		}
