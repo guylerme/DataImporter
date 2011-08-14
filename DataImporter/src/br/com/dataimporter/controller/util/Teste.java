@@ -14,6 +14,7 @@ import br.com.dataimporter.controller.TsvImporter;
 import br.com.dataimporter.model.DataMapper;
 import br.com.dataimporter.model.OrclDataMapper;
 import br.com.dataimporter.model.Table;
+import br.com.dataimporter.view.FileChooser;
 
 public class Teste {
 
@@ -32,6 +33,9 @@ public class Teste {
 		String filePath = "G:/";
 		String fileName = "autores-open_library-test.txt";
 
+		FileChooser fc = new FileChooser();
+		
+		
 		/*
 		 * /type/author /authors/OL1003081A 2 2008-08-20T18:14:00.880822
 		 * {"name": "William Pinder Eversley", "personal_name":

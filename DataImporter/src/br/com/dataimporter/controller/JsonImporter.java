@@ -10,7 +10,7 @@ import br.com.dataimporter.model.DataMapper;
 import br.com.dataimporter.model.OrclDataMapper;
 import br.com.dataimporter.model.Table;
 
-public class JsonImporter {
+public class JsonImporter implements Importer {
 
 	/** Caminho do arquivo */
 	private String filePath;
@@ -18,6 +18,10 @@ public class JsonImporter {
 
 	private DataMapper dm = new OrclDataMapper();
 
+	/* (non-Javadoc)
+	 * @see br.com.dataimporter.controller.Importer#importData(java.lang.String, java.lang.String)
+	 */
+	@Override
 	public void importData(String filePath, String fileName) {
 		this.filePath = filePath;
 		this.fileName = fileName;

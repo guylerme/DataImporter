@@ -14,7 +14,7 @@ import br.com.dataimporter.model.Table;
  *         Classe reponsável por importar dados de arquivos TSV (Tab Separeted
  *         Value)
  */
-public class TsvImporter {
+public class TsvImporter implements Importer {
 
 	/** Caminho do arquivo */
 	private String filePath;
@@ -57,7 +57,6 @@ public class TsvImporter {
 
 			in.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
